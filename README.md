@@ -19,4 +19,61 @@ In this project, we will clean the data and take a look at variables that have t
 - Medium to high correlation with the target variable
 - Survive the Augmented Dickey-Fuller test for stationarity and Granger's causality test
 
-After EDA, the two most potential variables are **_SP500_** and **_Spot price of Palladium_**
+### Correlation test
+![](https://github.com/DuyDoanLearning/stock_market_prediction_MachineLearning_and_LSTM/blob/Stock-Prediction/Images/Correlation_Test_1.png)
+
+After EDA, the two most potential variables are **_SP500_** and **_Spot price of Palladium_**. We will also include SHSZ_CSI_300 in a representative of China's stock indices.
+
+![](https://github.com/DuyDoanLearning/stock_market_prediction_MachineLearning_and_LSTM/blob/Stock-Prediction/Images/Correlation_Test_2.png)
+
+The Ridge and Lasso will be added to avoid multicollinearity in the regression task.
+
+### Feature Extraction
+To confirm the proposed variables are meaningful in predicting tomorrow's price and the cointegration form a long-run linear relationship, we will test at price and lag levels (from 1 to 5). We will also add differencing and returns of variables.
+
+Set of variables include:
+- Natural logarithm of return and 1 - 5 days diffs (predict log return then transfer back to price)
+- Diff / Return / Lag of 1 - 5 of input features
+- Lag version only from 1 - 5
+- Univariate (only target variable) and multivariate (combination of input features and extracted features)
+
+I hypothesize that the linear will perform best, as Engle-Granger (1987) stated that the relationship should be linear.
+
+## Results of ML models
+- Use lag/return/diff of 5
+![](https://github.com/DuyDoanLearning/stock_market_prediction_MachineLearning_and_LSTM/blob/Stock-Prediction/Images/results_log%20ret%20diff.png)
+
+- Use Lag only
+![](https://github.com/DuyDoanLearning/stock_market_prediction_MachineLearning_and_LSTM/blob/Stock-Prediction/Images/results_img_lag%20only.png)
+
+- Use original values (Without any extract features)
+![](https://github.com/DuyDoanLearning/stock_market_prediction_MachineLearning_and_LSTM/blob/Stock-Prediction/Images/Original_values.png)
+
+The models perform better when we input lag, return, and price differencing of relevant international stock indices and commodity prices
+![](https://github.com/DuyDoanLearning/stock_market_prediction_MachineLearning_and_LSTM/blob/Stock-Prediction/Images/results_img_prediction_multi.png)
+
+Taking a closer look, we can see it performs quite well on replicating the stock movements:
+![](https://github.com/DuyDoanLearning/stock_market_prediction_MachineLearning_and_LSTM/blob/Stock-Prediction/Images/results_img_lag%20only_closer.png)
+
+- Use the natural logarithm of return and differencing
+![](https://github.com/DuyDoanLearning/stock_market_prediction_MachineLearning_and_LSTM/blob/Stock-Prediction/Images/result_img_coint_prediction.png)
+
+The error is deficient, and the result nearly fits 100% with a very small error:
+![](https://github.com/DuyDoanLearning/stock_market_prediction_MachineLearning_and_LSTM/blob/Stock-Prediction/Images/results_table_log_diff%20version.png)
+
+This proved that the Engle-Granger models in predicting the delta of the target variable can be achieved through the delta of predictors and its' coefficient. 
+
+## Results of DL models
+LSTM models do not work well due to being too complicated, while the long-run relationship between cointegrated variables is simple and linear. Furthermore, adding more global financial market variables will not improve the model performance but worsen it it.
+
+- Univariate predictions:
+![](https://github.com/DuyDoanLearning/stock_market_prediction_MachineLearning_and_LSTM/blob/Stock-Prediction/Images/results_lstm_uni.png)
+
+- Multivariate predictions:
+![](https://github.com/DuyDoanLearning/stock_market_prediction_MachineLearning_and_LSTM/blob/Stock-Prediction/Images/results_img_multi_lstm.png)
+
+## Conclusions
+ML models can recognize simple relationships better than DL. Linear regression performs best in predicting tomorrow's stock price. The proposed features can achieve low errors. The technical indicators generated directly from the price give us lower error results.
+
+However, the log_diff version gave us excellent results, proving that based on the error correction model by Engle-Granger (1987), we should predict the log return of the price instead of directly predicting the true absolute price.
+
