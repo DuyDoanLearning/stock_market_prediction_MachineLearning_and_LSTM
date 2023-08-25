@@ -58,13 +58,13 @@ Taking a closer look, we can see it performs quite well on replicating the stock
 - Use the natural logarithm of return and differencing
 ![](https://github.com/DuyDoanLearning/stock_market_prediction_MachineLearning_and_LSTM/blob/Stock-Prediction/Images/result_img_coint_prediction.png)
 
-The error is deficient, and the result nearly fits 100% with a very small error:
+The error is deficient, and the result nearly fits 100% with a minimal error:
 ![](https://github.com/DuyDoanLearning/stock_market_prediction_MachineLearning_and_LSTM/blob/Stock-Prediction/Images/results_table_log_diff%20version.png)
 
-This proved that the Engle-Granger models in predicting the delta of the target variable can be achieved through the delta of predictors and its' coefficient. 
+This proved that the Engle-Granger models in predicting the delta of the target variable could be achieved through the delta of predictors and its' coefficient. 
 
 ## Results of DL models
-LSTM models do not work well due to being too complicated, while the long-run relationship between cointegrated variables is simple and linear. Furthermore, adding more global financial market variables will not improve the model performance but worsen it it.
+LSTM models do not work well due to being too complicated, while the long-run relationship between cointegrated variables is simple and linear. Furthermore, adding more global financial market variables will not improve the model performance but worsen it.
 
 - Univariate predictions:
 ![](https://github.com/DuyDoanLearning/stock_market_prediction_MachineLearning_and_LSTM/blob/Stock-Prediction/Images/results_lstm_uni.png)
@@ -73,7 +73,8 @@ LSTM models do not work well due to being too complicated, while the long-run re
 ![](https://github.com/DuyDoanLearning/stock_market_prediction_MachineLearning_and_LSTM/blob/Stock-Prediction/Images/results_img_multi_lstm.png)
 
 ## Conclusions
-ML models can recognize simple relationships better than DL. Linear regression performs best in predicting tomorrow's stock price. The proposed features can achieve low errors. The technical indicators generated directly from the price give us lower error results.
+ML models can recognize simple relationships better than DL. Linear regression performs best in predicting tomorrow's stock price. The proposed features can achieve low errors, especially when we form the spread between predictors and the target variable. This confirms the hypothesis that cointegration between two time series forms a linear relationship, and we can take advantage of this relationship to predict the future price of the VN-Index with a certain degree of accuracy. This also aligns with the cointegration and error correction model proposed by Engle and Granger in 1987.
 
-However, the log_diff version gave us excellent results, proving that based on the error correction model by Engle-Granger (1987), we should predict the log return of the price instead of directly predicting the true absolute price.
+However, the LSTM failed to capture this linear relationship. One possible explanation could be that the model takes the time series and is divided into batches of time steps. It has a short horizon of predicting, while the relationship between cointegration variables requires a longer horizon of learning and predicting.
+
 
